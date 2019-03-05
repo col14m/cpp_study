@@ -18,10 +18,29 @@ public:
     super_vector(size_t length);
     ~super_vector();
 
+    T* begin()
+    {
+        return data_;
+    }
+    T* end()
+    {
+        return data_ + length_;
+
+    }
+    const T* begin() const
+    {
+        return data_;
+    }
+    const T* end() const
+    {
+        return data_ + length_;
+
+    }
+
     T& operator[](size_t num) const;
     T& operator[](size_t num);
-
     const super_vector& operator=(const super_vector& that);
+
     size_t size() const
     {
         return length_;
@@ -147,7 +166,9 @@ int main (){
         a[i] = i;
     }
     b = a;
-
+    for (auto elem: a){
+        std::cout << elem << "  :  ";
+    }
     super_vector<int > c = a - b ;
     std::cout << a;
     return 0;
