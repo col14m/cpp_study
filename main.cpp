@@ -9,19 +9,19 @@
 
 
 template <typename T>
-class my_vector
+class super_vector
 {
 public:
 
-    my_vector();
-    my_vector(const my_vector& that);
-    my_vector(size_t length);
-    ~my_vector();
+    super_vector();
+    super_vector(const super_vector& that);
+    super_vector(size_t length);
+    ~super_vector();
 
     T& operator[](size_t num) const;
     T& operator[](size_t num);
 
-    const my_vector& operator=(const my_vector& that);
+    const super_vector& operator=(const super_vector& that);
     size_t size() const
     {
         return length_;
@@ -35,7 +35,7 @@ private:
 };
 
 template <typename T>
-my_vector<T>::my_vector():
+super_vector<T>::super_vector():
     length_ (LEN),
     data_ (new T[LEN])
 {
@@ -43,7 +43,7 @@ my_vector<T>::my_vector():
 }
 
 template <typename T>
-my_vector<T>::my_vector(const my_vector& that):
+super_vector<T>::super_vector(const super_vector& that):
     length_ (that.length_ ),
     data_ (new T[that.length_])
 {
@@ -51,7 +51,7 @@ my_vector<T>::my_vector(const my_vector& that):
     std::copy(that.data_, that.data_ + that.length_, data_);
 }
 template <typename T>
-my_vector<T>::~my_vector()
+super_vector<T>::~super_vector()
 {
     length_ = 0;
     delete[] data_ ;
@@ -60,7 +60,7 @@ my_vector<T>::~my_vector()
 }
 
 template <typename T>
-my_vector<T>::my_vector(size_t length):
+super_vector<T>::super_vector(size_t length):
     length_ (length),
     data_ (new T[length])
 {
@@ -68,10 +68,10 @@ my_vector<T>::my_vector(size_t length):
 
 }
 template <typename T>
-my_vector<T> operator+(const my_vector<T>& va, const my_vector<T>& vb)
+super_vector<T> operator+(const super_vector<T>& va, const super_vector<T>& vb)
 {
 
-    my_vector<T> res(std::min(va.size(), vb.size()));
+    super_vector<T> res(std::min(va.size(), vb.size()));
     for (size_t i = 0; i < std::min(va.size(), vb.size()); i++)
     {
         res[i] = va[i] + vb[i];
@@ -81,10 +81,10 @@ my_vector<T> operator+(const my_vector<T>& va, const my_vector<T>& vb)
 }
 
 template <typename T>
-my_vector<T> operator-(const my_vector<T>& va, const my_vector<T>& vb)
+super_vector<T> operator-(const super_vector<T>& va, const super_vector<T>& vb)
 {
 
-    my_vector<T> res(std::min(va.size(), vb.size()));
+    super_vector<T> res(std::min(va.size(), vb.size()));
     for (size_t i = 0; i < std::min(va.size(), vb.size()); i++)
     {
         res[i] = va[i] - vb[i];
@@ -94,14 +94,14 @@ my_vector<T> operator-(const my_vector<T>& va, const my_vector<T>& vb)
 }
 
 template <typename T>
-T& my_vector<T>::operator[](size_t num) const
+T& super_vector<T>::operator[](size_t num) const
 {
     return data_[num];
 
 }
 
 template <typename T>
-T& my_vector<T>::operator[](size_t num)
+T& super_vector<T>::operator[](size_t num)
 {
     return data_[num];
 
@@ -110,12 +110,12 @@ T& my_vector<T>::operator[](size_t num)
 
 
 template <typename T>
-const my_vector<T>& my_vector<T>::operator=(const my_vector& that)
+const super_vector<T>& super_vector<T>::operator=(const super_vector& that)
 {
 
     if (this == &that) return that;
 
-    my_vector victim(that);
+    super_vector victim(that);
     std::swap(length_, victim.length_);
     std::swap(data_, victim.data_);
 
@@ -123,7 +123,7 @@ const my_vector<T>& my_vector<T>::operator=(const my_vector& that)
 }
 
 template <typename T>
-std::ostream& operator<<(std::ostream& out, const my_vector <T>& v)
+std::ostream& operator<<(std::ostream& out, const super_vector <T>& v)
 {
     size_t i = 0;
     for (i; i + 1 < v.size(); i++)
@@ -141,14 +141,14 @@ std::ostream& operator<<(std::ostream& out, const my_vector <T>& v)
 
 int main (){
 
-    my_vector<int> a = 5;
-    my_vector <int> b;
+    super_vector<int> a = 5;
+    super_vector <int> b;
     for (int i = 0; i < 5; i++){
         a[i] = i;
     }
     b = a;
 
-    my_vector<int > c = a - b ;
+    super_vector<int > c = a - b ;
     std::cout << a;
     return 0;
 }
