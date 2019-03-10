@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <iostream>
-
+#include <utility>
 
 #define LEN 10
 
@@ -14,33 +14,21 @@ class super_vector
 public:
 
     super_vector();
-    super_vector(const super_vector& that);
+    super_vector(const super_vector<T>& that);
+    super_vector(super_vector<T>&& that);
+
     super_vector(size_t length);
     ~super_vector();
 
-    T* begin()
-    {
-        return data_;
-    }
-    T* end()
-    {
-        return data_ + length_;
-
-    }
-    const T* begin() const
-    {
-        return data_;
-    }
-    const T* end() const
-    {
-        return data_ + length_;
-
-    }
+    T* begin() { return data_; }
+    T* end() { return data_ + length_; }
+    const T* begin() const { return data_; }
+    const T* end() const { return data_ + length_; }
 
     T& operator[](size_t num) const;
     T& operator[](size_t num);
-    const super_vector& operator=(const super_vector& that);
-
+    const super_vector<T>& operator=(const super_vector<T>& that);
+    const super_vector<T>& operator=(super_vector<T>&& that);
     size_t size() const
     {
         return length_;
@@ -62,13 +50,55 @@ super_vector<T>::super_vector():
 }
 
 template <typename T>
-super_vector<T>::super_vector(const super_vector& that):
+super_vector<T>::super_vector(const super_vector<T>& that):
     length_ (that.length_ ),
     data_ (new T[that.length_])
 {
 
     std::copy(that.data_, that.data_ + that.length_, data_);
 }
+
+template <typename T>
+const super_vector<T>& super_vector<T>::operator=(const super_vector<T>& that)
+{
+
+    if (this == &that) return that;
+
+    super_vector victim(that);
+    std::swap(length_, victim.length_);
+    std::swap(data_, victim.data_);
+
+    return *this;
+}
+
+
+template <typename T>
+super_vector<T>::super_vector(super_vector<T>&& that):
+        length_ (that.length_ ),
+        data_ (that.data_)
+{
+
+    that.length_ = 0;
+    that.data_ = nullptr;
+
+}
+
+template <typename T>
+const super_vector<T>& super_vector<T>::operator=(super_vector<T>&& that)
+{
+
+    if (this == &that) return that;
+    delete[] data_;
+    data_ = that.data_;
+    length_ = that.length_;
+    that.data_ = nullptr;
+    that.length_ = 0;
+
+    return *this;
+}
+
+
+
 template <typename T>
 super_vector<T>::~super_vector()
 {
@@ -86,6 +116,7 @@ super_vector<T>::super_vector(size_t length):
 
 
 }
+
 template <typename T>
 super_vector<T> operator+(const super_vector<T>& va, const super_vector<T>& vb)
 {
@@ -129,19 +160,6 @@ T& super_vector<T>::operator[](size_t num)
 
 
 template <typename T>
-const super_vector<T>& super_vector<T>::operator=(const super_vector& that)
-{
-
-    if (this == &that) return that;
-
-    super_vector victim(that);
-    std::swap(length_, victim.length_);
-    std::swap(data_, victim.data_);
-
-    return *this;
-}
-
-template <typename T>
 std::ostream& operator<<(std::ostream& out, const super_vector <T>& v)
 {
     size_t i = 0;
@@ -171,5 +189,9 @@ int main (){
     }
     super_vector<int > c = a - b ;
     std::cout << a;
+
+    a = std::move(a);
+    a[0] = 5;
+
     return 0;
 }
