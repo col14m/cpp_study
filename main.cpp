@@ -17,7 +17,7 @@ public:
     super_vector(const super_vector<T>& that);
     super_vector(super_vector<T>&& that);
 
-    super_vector(size_t length);
+    explicit super_vector(size_t length);
     ~super_vector();
 
     T* begin() { return data_; }
@@ -25,14 +25,11 @@ public:
     const T* begin() const { return data_; }
     const T* end() const { return data_ + length_; }
 
-    T& operator[](size_t num) const;
+    const T& operator[](size_t num) const;
     T& operator[](size_t num);
     const super_vector<T>& operator=(const super_vector<T>& that);
     const super_vector<T>& operator=(super_vector<T>&& that);
-    size_t size() const
-    {
-        return length_;
-    }
+    size_t size() const { return length_; }
 
 private:
 
@@ -144,7 +141,7 @@ super_vector<T> operator-(const super_vector<T>& va, const super_vector<T>& vb)
 }
 
 template <typename T>
-T& super_vector<T>::operator[](size_t num) const
+const T& super_vector<T>::operator[](size_t num) const
 {
     return data_[num];
 
@@ -178,12 +175,12 @@ std::ostream& operator<<(std::ostream& out, const super_vector <T>& v)
 
 int main (){
 
-    super_vector<int> a = 5;
-    super_vector <int> b;
+    super_vector<int> a (5);
+
     for (int i = 0; i < 5; i++){
         a[i] = i;
     }
-    b = a;
+    const super_vector <int> b = a;
     for (auto elem: a){
         std::cout << elem << "  :  ";
     }
@@ -191,7 +188,6 @@ int main (){
     std::cout << a;
 
     a = std::move(a);
-    a[0] = 5;
-
+    std::cout << b;
     return 0;
 }
